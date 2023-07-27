@@ -80,7 +80,7 @@ public fun main() {
 }
 ```
 
-In the above example, `m` is explicitly declared to have type `Double`. As a result, the compiler infers its initializer as an expression of type `Double` rather than `Int`. Similarly, the compiler infers that the literal on the right hand side of `*=` should be interpreted as a floating-point number.
+In the above example, `n` is explicitly declared to have type `Double`. As a result, the compiler infers its initializer as an expression of type `Double` rather than `Int`. Similarly, the compiler infers that the literal on the right hand side of `*=` should be interpreted as a floating-point number.
 
 _Note: the ampersand in `&n += 10` indicates that `n` is being mutated in-place._ _We come back to it later._
 
