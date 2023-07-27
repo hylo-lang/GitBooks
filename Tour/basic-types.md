@@ -145,7 +145,7 @@ public fun main() {
   // ignoring circle.origin.y
   let (origin: (x: px, y: _), radius: r) = circle
   
-  print((px, r))  // (6.3, 1.0)
+  print((px, r))  // (6.3, 2.3)
 }
 ```
 
