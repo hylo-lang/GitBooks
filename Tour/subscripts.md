@@ -23,7 +23,7 @@ To better understand, let us instrument the subscript to observe its behavior. S
 ```
 subscript min(_ x: Int, _ y: Int): Int {
   print("enter")
-  yield if y > x { y } else { x }
+  yield if y < x { y } else { x }
   print("leave")
 }
 
