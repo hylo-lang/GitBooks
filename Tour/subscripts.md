@@ -4,7 +4,7 @@ A subscript is a resuable piece of code that _yields_ the value of an object, or
 
 ```
 subscript min(_ x: Int, _ y: Int): Int {
-  if y > x { y } else { x }
+  if y < x { y } else { x }
 }
 
 public fun main() {
