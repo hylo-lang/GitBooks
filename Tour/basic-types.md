@@ -223,9 +223,9 @@ type Matrix3 {
 
 public fun main() {
   var m = Matrix3(components: [
-    [0 ,0, 0],
-    [0 ,0, 0],
-    [0 ,0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
   ])
   &m.components[0][0] = 1.0
   &m.components[1][1] = 1.0
@@ -246,9 +246,9 @@ Static properties are declared with `static`. They can only be declared with `le
 type Matrix3 {
   // ...
   public static let zero = Matrix3(components: [
-    [0 ,0, 0],
-    [0 ,0, 0],
-    [0 ,0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
   ])
 }
 
