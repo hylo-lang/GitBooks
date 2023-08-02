@@ -7,3 +7,4 @@
 * [Basic types](basic-types.md)
 * [Functions and methods](functions-and-methods.md)
 * [Subscripts](subscripts.md)
+* [Concurrency](concurrency.md)
