@@ -135,7 +135,7 @@ subscript min(_ x: yielded Int, _ y: yielded Int): Int {
 public fun main() {
   var (x, y) = (1, 2)
   min[&x, &y] = 3
-  print(min[x, y]) // 3
+  print(min[x, y]) // 2
 }
 ```
 
