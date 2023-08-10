@@ -1,10 +1,10 @@
 # Concurrency
 
-> :warning: The concurrency approach of Val is still under design. This document only present the current of our plans. Anything is still subject to change.
+> :warning: The concurrency approach of Hylo is still under design. This document only present the current of our plans. Anything is still subject to change.
 
 ### Principles
 
-Concurrency in Val is based on the following principles:
+Concurrency in Hylo is based on the following principles:
 
 * Concurrent code has the same syntax/semantics as non-concurrent code.
   * No function colouring (e.g., marking functions with `async`).
@@ -23,8 +23,8 @@ Concurrency in Val is based on the following principles:
 * The user shall focus on focus on expressing the constraints between work items.
   * There is no need for low-level syncrhonization primitives, like mutexes and semaphores.
 * User can understand and control the costs associated with concurrency.
-  * Understanding how the application uses `spawn` abstractions and how it interacts with the non-Val code is enough to understand the costs associated with concurrency.
-  * Val allows the user to fully customize the handling of concurrency.
+  * Understanding how the application uses `spawn` abstractions and how it interacts with the non-Hylo code is enough to understand the costs associated with concurrency.
+  * Hylo allows the user to fully customize the handling of concurrency.
 
 ### Hello, concurrent world
 

@@ -2,7 +2,7 @@
 
 A function are blocks of reusable code that performs a single action, or group of related actions. They are an essential tool for managing the complexity of a program as it grows.
 
-_Note: Though Val should not be considered a functional programming language, functions are first-class citizens, and functional programming style is well-supported. In fact, Val's mutable value semantics can be freely mixed with purely functional code without eroding that code's local reasoning properties_
+_Note: Though Hylo should not be considered a functional programming language, functions are first-class citizens, and functional programming style is well-supported. In fact, Hylo's mutable value semantics can be freely mixed with purely functional code without eroding that code's local reasoning properties_
 
 ### Free functions
 
@@ -57,7 +57,7 @@ fun scale(_ v: Vector2, uniformly_by factor: Double) -> Vector2 {
 }
 ```
 
-The two `scale` functions above are similar, but not identical. The first accepts a vector as the scaling factor, the second a scalar, a difference that is captured in the argument labels. Argument labels are part of the full function name, so the first function can be referred to as `scale(_,by:)` and the second as `scale(_,uniformly_by:)`. In fact, Val does not support type-based overloading, so the _only_ way for two functions to share the same base name is to have different argument labels. _Note: many of the use cases for type-based overloading in other languages can best be handled by using method bundles._
+The two `scale` functions above are similar, but not identical. The first accepts a vector as the scaling factor, the second a scalar, a difference that is captured in the argument labels. Argument labels are part of the full function name, so the first function can be referred to as `scale(_,by:)` and the second as `scale(_,uniformly_by:)`. In fact, Hylo does not support type-based overloading, so the _only_ way for two functions to share the same base name is to have different argument labels. _Note: many of the use cases for type-based overloading in other languages can best be handled by using method bundles._
 
 A function with multiple statements that does not return `Void` must execute one `return` statement each time it is called.
 
@@ -97,13 +97,13 @@ _Note: A default argument expression is evaluated at each call site._
 
 ### Parameter passing conventions
 
-A parameter passing convention describes how an argument is passed from caller to callee. In Val, there are four: `let`, `inout`, `sink` and `set`. In the next series of examples, we will define four corresponding functions to offset this 2-dimensional vector type:
+A parameter passing convention describes how an argument is passed from caller to callee. In Hylo, there are four: `let`, `inout`, `sink` and `set`. In the next series of examples, we will define four corresponding functions to offset this 2-dimensional vector type:
 
 ```
 typealias Vector2 = (x: Double, y: Double)
 ```
 
-We will also show how Val's parameter passing conventions relate to other programming languages, namely C++ and Rust.
+We will also show how Hylo's parameter passing conventions relate to other programming languages, namely C++ and Rust.
 
 #### **`let` parameters**
 
@@ -168,7 +168,7 @@ fn offset_let(v: &Vector2, delta: &Vector2) -> Vector2 {
 }
 ```
 
-The only difference between an immutable borrow in Rust and a `let` in Val is that the language encourages the programmer to think of a `let` parameter as being passed by value.
+The only difference between an immutable borrow in Rust and a `let` in Hylo is that the language encourages the programmer to think of a `let` parameter as being passed by value.
 
 The `let` convention does not transfer ownership of the argument to the callee, meaning, for example, that without first copying it, a `let` parameter can't be returned, or stored anywhere that outlives the call.
 
@@ -244,7 +244,7 @@ fn offset_inout(target: &mut Vector2, delta: &Vector2) {
 }
 ```
 
-Again, the only difference is one of perspective: Val encourages you to think of `inout` parameters as though they are passed by “move-in/move-out,” and indeed the semantics are the same except that no data actually moves in memory.
+Again, the only difference is one of perspective: Hylo encourages you to think of `inout` parameters as though they are passed by “move-in/move-out,” and indeed the semantics are the same except that no data actually moves in memory.
 
 Just as with `let` parameters, `inout` parameters are not owned by the callee, and their values cannot escape the callee without first being copied.
 
@@ -303,7 +303,7 @@ int main() {
 }
 ```
 
-In Val, the lifetime of a moved-from value ends, rather than being left accessible in an indeterminate state.
+In Hylo, the lifetime of a moved-from value ends, rather than being left accessible in an indeterminate state.
 
 A Rust developer can understand a `sink` parameter as a _pass by move_. If the source type is copyable it is as though it first assigned to a unique reference, so the move is forced:
 
@@ -521,7 +521,7 @@ public fun main() {
 
 ### Closures
 
-Functions are first-class citizen in Val, meaning that they be assigned to bindings, passed as arguments or returned from functions, like any other value. When a function is used as a value, it is called a _closure_.
+Functions are first-class citizen in Hylo, meaning that they be assigned to bindings, passed as arguments or returned from functions, like any other value. When a function is used as a value, it is called a _closure_.
 
 ```
 fun round(_ n: Double, digits: Int) -> Double {

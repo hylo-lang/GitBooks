@@ -1,6 +1,6 @@
 # Basic types
 
-Val is statically typed: the type of a binding must always match the type of the object it is bound to. For instance, it is impossible to assign a floating point number to an integer binding:
+Hylo is statically typed: the type of a binding must always match the type of the object it is bound to. For instance, it is impossible to assign a floating point number to an integer binding:
 
 ```
 public fun main() {
@@ -29,11 +29,11 @@ public fun main() {
 }
 ```
 
-Val's standard library defines the types that are most commonly used, including numeric types (e.g., `Int`, `Double`), text strings (`String`), Booleans (`Bool`), and types to represent data structures. The remainder of this section gives an overview of the most important ones.
+Hylo's standard library defines the types that are most commonly used, including numeric types (e.g., `Int`, `Double`), text strings (`String`), Booleans (`Bool`), and types to represent data structures. The remainder of this section gives an overview of the most important ones.
 
 ### Booleans, numbers, and strings
 
-A [Boolean](https://en.wikipedia.org/wiki/Boolean\_data\_type) is a value that is either `true` or `false`. In Val, those are represented by the type `Bool`:
+A [Boolean](https://en.wikipedia.org/wiki/Boolean\_data\_type) is a value that is either `true` or `false`. In Hylo, those are represented by the type `Bool`:
 
 ```
 public fun main() {
@@ -42,7 +42,7 @@ public fun main() {
 }
 ```
 
-Integer numbers are typically represented by the type `Int`, which represents a machine-size integer (usually 64 bits on modern computers). Val also provides types to represent integers of different sizes and signedness. For example, `UInt16` represents a 16-bit unsigned number and `Int8` a 8-bit signed number, independently of the machine for which the program is compiled.
+Integer numbers are typically represented by the type `Int`, which represents a machine-size integer (usually 64 bits on modern computers). Hylo also provides types to represent integers of different sizes and signedness. For example, `UInt16` represents a 16-bit unsigned number and `Int8` a 8-bit signed number, independently of the machine for which the program is compiled.
 
 _Note: The type `Int` should be preferred unless you need a different variant for a specific reason (e.g., representing a hardware register, storage optimization)._ _This convention aids code consistency and interoperability._
 
@@ -50,7 +50,7 @@ Floating point numbers are represented by the types `Float` and `Double`, denoti
 
 _Note: For the same reasons as `Int` should be preferred for every integer value, `Double` should be preferred for any floating-point value._
 
-Val does not support any kind of implicit conversion between numeric types. For example, the following program is illegal:
+Hylo does not support any kind of implicit conversion between numeric types. For example, the following program is illegal:
 
 ```
 public fun main() {
@@ -102,7 +102,7 @@ The first new-line delimiter in a multiline string literal is not part of the va
 
 For example, in the program above, the indentation pattern is defined as two spaces. Therefore, the value of `text` starts with "C'est" and ends with "rayons."
 
-Strings can be mutated in place in Val:
+Strings can be mutated in place in Hylo:
 
 ```
 public fun main() {
@@ -259,26 +259,24 @@ public fun main() {
 
 ### Unions
 
-Two or more types can form a union type, also known as a [sum type](https://en.wikipedia.org/wiki/Tagged\_union). In Val, a union is a supertype of all its element types, so any element type can be used in an expression where the union type is expected:
+Two or more types can form a union type, also known as a [sum type](https://en.wikipedia.org/wiki/Tagged\_union). In Hylo, a union is a supertype of all its element types, so any element type can be used in an expression where the union type is expected:
 
 ```
 public fun main() {
-  var x: Int | String = "Hello, World!"
+  var x: Union<Int, String> = "Hello, World!"
   print(x) // Hello, World!
   &x = 42
   print(x) // 42
 }
 ```
 
-It is often convenient to create (generic) type aliases to denote unions. For example, Val's standard library defines [optionals](https://en.wikipedia.org/wiki/Option\_type) as follows:
+It is often convenient to create (generic) type aliases to denote unions. For example, Hylo's standard library defines [optionals](https://en.wikipedia.org/wiki/Option\_type) as follows:
 
 ```
-public typealias Optional<T> = T | Nil
-public type Nil {
+public typealias Optional<T> = Union<T, Nil<T>>
+public type Nil<T>: Linear {
   public init() {}
 }
 ```
 
 Here, the type `Nil` is an empty structure used only to mark the absence of a `T`. The type `Optional<T>` is the union of any type `T` and `Nil`, which can be used to indicate that a particular value might be absent.
-
-_Note: While `T | U | T` is equivalent to `T | U` (element type repetitions at the same level are collapsed), `(T | U) | T` is a distinct type. Thus `Optional<Optional<T>>` is not the same as `Optional<T>`._
