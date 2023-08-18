@@ -15,5 +15,5 @@ _The standard library vends an API to interact with the program's environment._ 
 To run this program:
 
 * Copy that `main` function into a file called `Hello.hylo`.
-* Run the command `hyloc Hello.hylo -o hello`.
+* Run the command `hc Hello.hylo -o hello`.
 * Run the command `./hello` to run the executable.

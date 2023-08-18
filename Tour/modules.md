@@ -8,7 +8,7 @@ Each module defines an API resilience boundary: only public declarations are vis
 
 ### Bundling files
 
-You can bundle multiple files in a single module by passing all of them as arguments to `hyloc`. For example, in a separate file we can define a function, that prints a specialized greeting, and call it from `Hello.hylo`:
+You can bundle multiple files in a single module by passing all of them as arguments to `hc`. For example, in a separate file we can define a function, that prints a specialized greeting, and call it from `Hello.hylo`:
 
 ```
 // In `Hello.hylo`
@@ -26,10 +26,10 @@ Here, we declare a function `greet` that takes a single argument of type `String
 
 To run this program:
 
-* Run the command `hyloc Hello.hylo Greet.hylo -o hello`
+* Run the command `hc Hello.hylo Greet.hylo -o hello`
 * Run the command `./hello`
 
-_Alternatively, you can put both source files in a subdirectory, say `Sources/`, and compile the program with `hyloc Sources -o hello`._
+_Alternatively, you can put both source files in a subdirectory, say `Sources/`, and compile the program with `hc Sources -o hello`._
 
 Note that `greet` need not be `public` to be visible from another file in the module. All entities declared at the top level of a file are visible everywhere in a module, but not beyond that module's boundary.
 
@@ -66,5 +66,5 @@ Notice that `greet` had to be made public so it could be visible to other module
 
 To run this program:
 
-* Run the command `hyloc --modules Sources/Hello Sources/Greet -o hello`
+* Run the command `hc --modules Sources/Hello Sources/Greet -o hello`
 * Run the command `./hello`
