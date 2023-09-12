@@ -76,7 +76,7 @@ The `spawn` on line 6 will create a new thread of execution and call `do_greet()
 
 Assuming that there are two OS threads for this program, the call to `await` will not block any of these threads. Instead, it will continue on the OS thread that finishes last. In our example, this is most probably the spawn thread. This leads to an interesting arrangement: the OS thread on which  `concurrent_greeting()` finishes is different than the OS thread on which this function is started. We call this _thread inversion_.
 
-The OS thread that starts `concurrent_greenting()` will be returned to the middleware when `await` is called and can be reused to run other work items, thus avoiding the main performance problems associated with the classic thread & locks model.
+The OS thread that starts `concurrent_greeting()` will be returned to the middleware when `await` is called and can be reused to run other work items, thus avoiding the main performance problems associated with the classic thread & locks model.
 
 ### Concurrent sort example
 
