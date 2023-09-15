@@ -66,5 +66,5 @@ Notice that `greet` had to be made public so it could be visible to other module
 
 To run this program:
 
-* Run the command `hc --modules Sources/Hello Sources/Greet -o hello`
+* Run the command `hc --modules Sources/Hello Sources/Greetings -o hello`
 * Run the command `./hello`
