@@ -41,7 +41,7 @@ In the program above, `min` has been changed so that it prints a message before 
 
 ### Member subscripts
 
-Subscripts declaired in type declarations and extensions are called member subscripts. Just like methods, they receive an implicit receiver parameter.
+Subscripts declared in type declarations and extensions are called member subscripts. Just like methods, they receive an implicit receiver parameter.
 
 ```
 type Matrix3 {
