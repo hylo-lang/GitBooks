@@ -1,6 +1,6 @@
 # Concurrency
 
-> :warning: The concurrency approach of Hylo is still under design. This document only present the current of our plans. Anything is still subject to change.
+> :warning: The concurrency approach of Hylo is still under design. This document only present our current plans. Anything is still subject to change.
 
 ### Principles
 
