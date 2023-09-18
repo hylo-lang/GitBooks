@@ -91,7 +91,7 @@ subscript min_inout(_ x: inout Int, y: inout Int): Int {
 
 public fun main() {
   var (x, y) = (1, 2)
-  &min_inout[&x, &z] += 2
+  &min_inout[&x, &y] += 2
   print(x) // 3
 }
 ```
