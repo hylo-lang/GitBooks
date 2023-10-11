@@ -2,7 +2,7 @@
 
 The object denoted by a mutable binding can be modified, whereas that of an immutable binding cannot.
 
-Immutable bindings are declared with `let` and can be initialized with the `=` operator: It is not possible to modify the bound object during the lifetime of the binding.
+Immutable bindings are declared with `let` and can be initialized with the `=` operator. It is not possible to modify the bound object during the lifetime of the binding.
 
 ```
 public fun main() {
@@ -38,7 +38,7 @@ Note however that such a projection is not a reference in the usual sense; it ha
 
 The _lifetime_ of a binding denotes the region of the program where the value of that binding is accessed. The lifetime always ends after the last expression in which the binding occurs. For example, the lifetime of `weight` ends after the first call to `print` in the program below:
 
-```
+```hylo
 public fun main() {
   let weight = 1.0
   print(weight) // 1.0
@@ -49,7 +49,7 @@ public fun main() {
 
 Some operations are said to be _consuming_, because they force-end the lifetime of a binding. In other words, they _must_ be the last use of the consumed binding. For example, assigning into a `var` binding consumes the source of the assignment. Similarly, tuple initialization consumes the source values.
 
-```
+```hylo
 public fun main() {
   let weight = 1.0
   let base_length = 2.0

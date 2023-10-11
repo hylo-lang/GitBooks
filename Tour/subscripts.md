@@ -2,7 +2,7 @@
 
 A subscript is a resuable piece of code that _yields_ the value of an object, or part thereof. It operates very similarly to a function, but rather than returning a value to its caller, it temporarily yields control for the caller to access the yielded value.
 
-```
+```hylo
 subscript min(_ x: Int, _ y: Int): Int {
   if x > y { y } else { x }
 }
@@ -20,7 +20,7 @@ Note that, because `min` does not return a value, its parameters need not to be 
 
 To better understand, let us instrument the subscript to observe its behavior. Similarly to functions, note that if the body of a subscript involves multiple statements, yielded values must be indicated by a `yield` statement. Further, a subscript must have exactly one `yield` statement on every possible execution path.
 
-```
+```hylo
 subscript min(_ x: Int, _ y: Int): Int {
   print("enter")
   yield if x > y { y } else { x }
@@ -37,13 +37,13 @@ public fun main() {
 }
 ```
 
-In the program above, `min` has been changed so that it prints a message before and after yielding a value. In `main`, the first message appears `min` is called when the projection starts; the second message appears when the projection ends.
+In the program above, `min` has been changed so that it prints a message before and after yielding a value. In `main`, the first message appears after `min` is called when the projection starts; the second message appears when the projection ends.
 
 ### Member subscripts
 
 Subscripts declared in type declarations and extensions are called member subscripts. Just like methods, they receive an implicit receiver parameter.
 
-```
+```hylo
 type Matrix3 {
   public var components: Double[3][3]
   public memberwise init
@@ -56,7 +56,7 @@ type Matrix3 {
 
 A member subscript can be anonymous. In that case, it is called by affixing square brackets directly after the receiver.
 
-```
+```hylo
 type Matrix3 {
   public var components: Double[3][3]
   public memberwise init
@@ -84,7 +84,7 @@ Just like methods, subscripts and member subscripts can bundle multiple implemen
 
 An `inout` subscript projects values mutably:
 
-```
+```hylo
 subscript min_inout(_ x: inout Int, y: inout Int): Int {
   inout { if y > x { &x } else { &y } }
 }
@@ -98,9 +98,9 @@ public fun main() {
 
 A mutable subscript can always be used immutably as well. However, in the example above, because the parameters are `inout`, arguments to `min_inout` will have to be passed `inout` even when the subscript is used immutably.
 
-To solve that problem, we can mark the parameters `yielded` instead, which act as a placeholder for either `let`, `inout`, or `sink` dependeing on the way the subscript is being used.
+To solve that problem, we can mark the parameters `yielded` instead, which act as a placeholder for either `let`, `inout`, or `sink` depending on the way the subscript is being used.
 
-```
+```hylo
 subscript min(_ x: yielded Int, _ y: yielded Int): Int {
   inout { if y > x { &x } else { &y } }
 }
@@ -113,7 +113,7 @@ public fun main() {
 
 Here, the immutable variant of the subscript is synthesized from the mutable one. In some cases, however, you may need to implement different behavior. In such situations, you can bundle multiple implementations together:
 
-```
+```hylo
 subscript min(_ x: yielded Int, _ y: yielded Int): Int {
   let   { if y > x { x } else { y } }
   inout { if y > x { &x } else { &y } }
@@ -126,7 +126,7 @@ A `set` subscript does not project any value. Instead, it is used when the value
 
 A `set` subscript accepts an implicit `sink` parameter named `new_value` denoting the value to assign:
 
-```
+```hylo
 subscript min(_ x: yielded Int, _ y: yielded Int): Int {
   inout { if y > x { &x } else { &y } }
   set   { if y > x { &x = new_value } else { &y = new_value } }
@@ -165,7 +165,7 @@ The `sink` variant of a subscript can always be synthesized from the `let` varia
 
 ### Computed properties
 
-A member subscript that accepts no argument can be declared as a _computed property_, which are accessed without square brackets.
+A member subscript that accepts no arguments can be declared as a _computed property_, which is accessed without square brackets.
 
 ```
 type Angle {
@@ -185,5 +185,10 @@ type Angle {
       &radians = new_value * Double.pi / 180.0
     }
   }
+}
+
+public fun main() {
+  let angle = Angle(radians: Double.pi)
+  print(angle.degrees) // 180.0
 }
 ```
