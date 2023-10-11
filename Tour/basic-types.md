@@ -2,7 +2,7 @@
 
 Hylo is statically typed: the type of a binding must always match the type of the object it is bound to. For instance, it is impossible to assign a floating point number to an integer binding:
 
-```
+```hylo
 public fun main() {
   var length = 1
   &length = 2.3 // error: expected type `Int`, found `Double`
@@ -11,7 +11,7 @@ public fun main() {
 
 The type of a binding is determined at declaration. If an initializing expression is present, such as in all previous examples, the binding is given the type of that expression. Alternatively, we can state the type of a binding explicitly:
 
-```
+```hylo
 public fun main() {
   var weight: Double = 1.0
   &weight = 2.3
@@ -21,7 +21,7 @@ public fun main() {
 
 The type of an expression can be retrieved, without evaluating the expression, using `type(of:)`:
 
-```
+```hylo
 public fun main() {
   let weight = 2.3
   print(type(of: weight)) // Double
@@ -35,7 +35,7 @@ Hylo's standard library defines the types that are most commonly used, including
 
 A [Boolean](https://en.wikipedia.org/wiki/Boolean\_data\_type) is a value that is either `true` or `false`. In Hylo, those are represented by the type `Bool`:
 
-```
+```hylo
 public fun main() {
   let is_two_greater_than_one = 2 > 1
   print(type(of: is_two_greater_than_one)) // Bool
@@ -52,7 +52,7 @@ _Note: For the same reasons as `Int` should be preferred for every integer value
 
 Hylo does not support any kind of implicit conversion between numeric types. For example, the following program is illegal:
 
-```
+```hylo
 public fun main() {
   let n = 3.2
   let m = 8
@@ -62,7 +62,7 @@ public fun main() {
 
 All numeric conversions must be written explicitly by calling the appropriate initializer. For example, we can fix the program above by converting `m` to `Double` before the multiplication:
 
-```
+```hylo
 public fun main() {
   let n = 3.2
   let m = 8
@@ -72,7 +72,7 @@ public fun main() {
 
 By default, integer literals are interpreted as `Int` and floating-point as `Double`. However, a literal may be interpreted as a different type depending on the context in which it appears:
 
-```
+```hylo
 public fun main() {
   var n: Double = 2
   &n *= 10
@@ -82,11 +82,11 @@ public fun main() {
 
 In the above example, `n` is explicitly declared to have type `Double`. As a result, the compiler infers its initializer as an expression of type `Double` rather than `Int`. Similarly, the compiler infers that the literal on the right hand side of `*=` should be interpreted as a floating-point number.
 
-_Note: the ampersand in `&n += 10` indicates that `n` is being mutated in-place._ _We come back to it later._
+_Note: the ampersand in `&n += 10` indicates that `n` is being mutated in-place._ _We will come back to it later._
 
-Text is represented by the type `String` and has two literal forms. Simple string literals are sequences of character surrounded by double quotes on a single line (e.g., `"Hello, World!"`). Multiline literals are surrounded by sequences of three double quotes on either side and may contain new lines.
+Text is represented by the type `String` and has two literal forms. Simple string literals are sequences of characters surrounded by double quotes on a single line (e.g., `"Hello, World!"`). Multiline literals are surrounded by sequences of three double quotes on either side and may contain new lines.
 
-```
+```hylo
 public fun main() {
   let text = """
   C'est un trou de verdure où chante une rivière
@@ -104,7 +104,7 @@ For example, in the program above, the indentation pattern is defined as two spa
 
 Strings can be mutated in place in Hylo:
 
-```
+```hylo
 public fun main() {
   var text = "Hello, "
   &text.append("World!")  // <=== HERE
@@ -116,7 +116,7 @@ public fun main() {
 
 A tuple is a composition of zero or more values, each of which can have any type. It can be created with a comma-separated list of values, enclosed in parentheses, and each value can (optionally) be labeled. Of course, tuples can contain other tuples.
 
-```
+```hylo
 public fun main() {
   let circle = (origin: (x: 6.3, y: 1.0), radius: 2.3)
   print(circle)
@@ -127,7 +127,7 @@ _The elements of a tuple are laid out contiguously in memory, with potential pad
 
 The elements of a tuple are accessed by appending `.n` to a tuple expression, where `n` denotes the `n`th element of the tuple, stating at zero. An element can also be referred to by its label, if any.
 
-```
+```hylo
 public fun main() {
   var circle = (origin: (x: 6.3, y: 1.0), radius: 2.3)
   &circle.0.1 = 3.6
@@ -137,7 +137,7 @@ public fun main() {
 
 The values of a tuple can be unpacked to local bindings through a process called "destructuring". Irrelevant elements can be ignored by using an underscore:
 
-```
+```hylo
 public fun main() {
   let circle = (origin: (x: 6.3, y: 1.0), radius: 2.3)
   
@@ -153,7 +153,7 @@ public fun main() {
 
 A buffer is a fixed-size collection of homogeneous elements laid out contiguously in memory. It can be created with a comma-separated list of values, enclosed in square brackets. The elements of a buffer can be accessed by _subscripting_ a buffer expression with an integer index:
 
-```
+```hylo
 public fun main() {
   let triangle = [
     (x: 0.0, y: 0.0),
@@ -168,7 +168,7 @@ _Note: indexing a buffer outside of its bounds is either caught as a compile-tim
 
 The type of a buffer is written either `T[n]` or `Buffer<T, n>`, where `T` is a type and `n` the number of elements in the buffer. All elements of a buffer must be initialized at the same time as the buffer itself, either by the means of a buffer literal expression, as in the program above, or by calling a buffer _initializer_:
 
-```
+```hylo
 typealias Point = (x: Double, y: Double)
 public fun main() {
   var triangle = Point[3](fun(i) { (x: Double(i), y: 0.0) }) // <== HERE
@@ -181,7 +181,7 @@ In the program above, `triangle` is created by calling `Buffer.init(_:)`, which 
 
 An array is like a buffer that can be resized dynamically:
 
-```
+```hylo
 typealias Point = (x: Double, y: Double)
 public fun main() {
   var points = Array<Point>()
@@ -193,7 +193,7 @@ public fun main() {
 
 Passing a range of indices to any collection's subscript creates a slice. A slice is a projection of a sub-part of a collection that can be accessed for reading and or writing.
 
-```
+```hylo
 public fun main() {
   let numbers = [0, 1, 2, 3, 4]
   print(numbers[2 ..< 4]) // [2, 3]
@@ -206,16 +206,16 @@ Just like a tuple, a structure is a container composed of zero or more heterogen
 
 A structure is declared with the keyword `type` and contains typed properties declared as bindings:
 
-```
+```hylo
 type Matrix3 {
   public var components: Double[3][3]
   public memberwise init
 }
 ```
 
-The type declaration above defines a type `Matrix3` with a single property of type `Double[3][3]`. The second declaration exposes the default memberwise initializer of the type, allowing us to create matrices by calling `Matrix2.init(components:)`:
+The type declaration above defines a type `Matrix3` with a single property of type `Double[3][3]`. The second declaration exposes the default memberwise initializer of the type, allowing us to create matrices by calling `Matrix3.init(components:)`:
 
-```
+```hylo
 type Matrix3 {
   public var components: Double[3][3]
   public memberwise init
@@ -242,7 +242,7 @@ A structure can also define static properties. Those are not part of structure i
 
 Static properties are declared with `static`. They can only be declared with `let` and are therefore always immutable:
 
-```
+```hylo
 type Matrix3 {
   // ...
   public static let zero = Matrix3(components: [
@@ -261,7 +261,7 @@ public fun main() {
 
 Two or more types can form a union type, also known as a [sum type](https://en.wikipedia.org/wiki/Tagged\_union). In Hylo, a union is a supertype of all its element types, so any element type can be used in an expression where the union type is expected:
 
-```
+```hylo
 public fun main() {
   var x: Union<Int, String> = "Hello, World!"
   print(x) // Hello, World!
