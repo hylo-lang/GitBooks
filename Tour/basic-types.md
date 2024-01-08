@@ -5,7 +5,7 @@ Hylo is statically typed: the type of a binding must always match the type of th
 ```
 public fun main() {
   var length = 1
-  &length = 2.3 // error: expected type `Int`, found `Double`
+  &length = 2.3 // error: expected type `Int`, found `Float64`
 }
 ```
 
@@ -13,7 +13,7 @@ The type of a binding is determined at declaration. If an initializing expressio
 
 ```
 public fun main() {
-  var weight: Double = 1.0
+  var weight: Float64 = 1.0
   &weight = 2.3
   print(weight) // 2.3
 }
@@ -24,12 +24,12 @@ The type of an expression can be retrieved, without evaluating the expression, u
 ```
 public fun main() {
   let weight = 2.3
-  print(type(of: weight)) // Double
+  print(type(of: weight)) // Float64
   print(type(of: "Hey!")) // String
 }
 ```
 
-Hylo's standard library defines the types that are most commonly used, including numeric types (e.g., `Int`, `Double`), text strings (`String`), Booleans (`Bool`), and types to represent data structures. The remainder of this section gives an overview of the most important ones.
+Hylo's standard library defines the types that are most commonly used, including numeric types (e.g., `Int`, `Float64`), text strings (`String`), Booleans (`Bool`), and types to represent data structures. The remainder of this section gives an overview of the most important ones.
 
 ### Booleans, numbers, and strings
 
@@ -46,9 +46,9 @@ Integer numbers are typically represented by the type `Int`, which represents a 
 
 _Note: The type `Int` should be preferred unless you need a different variant for a specific reason (e.g., representing a hardware register, storage optimization)._ _This convention aids code consistency and interoperability._
 
-Floating point numbers are represented by the types `Float` and `Double`, denoting [IEEE](https://en.wikipedia.org/wiki/IEEE\_754) single and double-precision values respectively.
+Floating point numbers are represented by the types `Float32` and `Float64`, denoting [IEEE](https://en.wikipedia.org/wiki/IEEE\_754) single and double-precision values respectively.
 
-_Note: For the same reasons as `Int` should be preferred for every integer value, `Double` should be preferred for any floating-point value._
+_Note: For the same reasons as `Int` should be preferred for every integer value, `Float64` should be preferred for any floating-point value._
 
 Hylo does not support any kind of implicit conversion between numeric types. For example, the following program is illegal:
 
@@ -56,31 +56,31 @@ Hylo does not support any kind of implicit conversion between numeric types. For
 public fun main() {
   let n = 3.2
   let m = 8
-  print(n * m) // error: cannot apply `Double.infix*` to argument of type `Int`
+  print(n * m) // error: cannot pass value of type 'Int' to parameter 'let Float64'
 }
 ```
 
-All numeric conversions must be written explicitly by calling the appropriate initializer. For example, we can fix the program above by converting `m` to `Double` before the multiplication:
+All numeric conversions must be written explicitly by calling the appropriate initializer. For example, we can fix the program above by converting `m` to `Float64` before the multiplication:
 
 ```
 public fun main() {
   let n = 3.2
   let m = 8
-  print(n * Double(m)) // 25.6
+  print(n * Float64(m)) // 25.6
 }
 ```
 
-By default, integer literals are interpreted as `Int` and floating-point as `Double`. However, a literal may be interpreted as a different type depending on the context in which it appears:
+By default, integer literals are interpreted as `Int` and floating-point as `Float64`. However, a literal may be interpreted as a different type depending on the context in which it appears:
 
 ```
 public fun main() {
-  var n: Double = 2
+  var n: Float64 = 2
   &n *= 10
   print(n) // prints 20.0
 }
 ```
 
-In the above example, `n` is explicitly declared to have type `Double`. As a result, the compiler infers its initializer as an expression of type `Double` rather than `Int`. Similarly, the compiler infers that the literal on the right hand side of `*=` should be interpreted as a floating-point number.
+In the above example, `n` is explicitly declared to have type `Float64`. As a result, the compiler infers its initializer as an expression of type `Float64` rather than `Int`. Similarly, the compiler infers that the literal on the right hand side of `*=` should be interpreted as a floating-point number.
 
 _Note: the ampersand in `&n += 10` indicates that `n` is being mutated in-place._ _We come back to it later._
 
@@ -169,9 +169,9 @@ _Note: indexing a buffer outside of its bounds is either caught as a compile-tim
 The type of a buffer is written either `T[n]` or `Buffer<T, n>`, where `T` is a type and `n` the number of elements in the buffer. All elements of a buffer must be initialized at the same time as the buffer itself, either by the means of a buffer literal expression, as in the program above, or by calling a buffer _initializer_:
 
 ```
-typealias Point = (x: Double, y: Double)
+typealias Point = {x: Float64, y: Float64}
 public fun main() {
-  var triangle = Point[3](fun(i) { (x: Double(i), y: 0.0) }) // <== HERE
+  var triangle = Point[3](fun(i) { (x: Float64(i), y: 0.0) }) // <== HERE
   &triangle[1].y = 2.5
   print(triangle[1]) // (x: 1.0, y: 2.5)
 }
@@ -182,7 +182,7 @@ In the program above, `triangle` is created by calling `Buffer.init(_:)`, which 
 An array is like a buffer that can be resized dynamically:
 
 ```
-typealias Point = (x: Double, y: Double)
+typealias Point = {x: Float64, y: Float64}
 public fun main() {
   var points = Array<Point>()
   print(points.count())            // 0
@@ -208,16 +208,16 @@ A structure is declared with the keyword `type` and contains typed properties de
 
 ```
 type Matrix3 {
-  public var components: Double[3][3]
+  public var components: Float64[3][3]
   public memberwise init
 }
 ```
 
-The type declaration above defines a type `Matrix3` with a single property of type `Double[3][3]`. The second declaration exposes the default memberwise initializer of the type, allowing us to create matrices by calling `Matrix2.init(components:)`:
+The type declaration above defines a type `Matrix3` with a single property of type `Float64[3][3]`. The second declaration exposes the default memberwise initializer of the type, allowing us to create matrices by calling `Matrix3.init(components:)`:
 
 ```
 type Matrix3 {
-  public var components: Double[3][3]
+  public var components: Float64[3][3]
   public memberwise init
 }
 
