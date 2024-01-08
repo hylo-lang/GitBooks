@@ -174,15 +174,15 @@ type Angle {
   
   public property degrees: Float64 {
     let {
-      radians * 180.0 / Float64.pi
+      radians * 180.0 / Float64.pi()
     }
     inout {
-      var d = radians * 180.0 / Float64.pi
+      var d = radians * 180.0 / Float64.pi()
       yield &d
-      radians = d * Float64.pi / 180.0
+      radians = d * Float64.pi() / 180.0
     }
     set {
-      &radians = new_value * Float64.pi / 180.0
+      &radians = new_value * Float64.pi() / 180.0
     }
   }
 }
