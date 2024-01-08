@@ -45,10 +45,10 @@ Subscripts declared in type declarations and extensions are called member subscr
 
 ```
 type Matrix3 {
-  public var components: Double[3][3]
+  public var components: Float64[3][3]
   public memberwise init
 
-  public subscript row(_ index: Int): Double[3] {
+  public subscript row(_ index: Int): Float64[3] {
     components[index]
   }
 }
@@ -58,10 +58,10 @@ A member subscript can be anonymous. In that case, it is called by affixing squa
 
 ```
 type Matrix3 {
-  public var components: Double[3][3]
+  public var components: Float64[3][3]
   public memberwise init
 
-  public subscript(row: Int, col: Int): Double {
+  public subscript(row: Int, col: Int): Float64 {
     components[row][col]
   }
 }
@@ -169,20 +169,20 @@ A member subscript that accepts no argument can be declared as a _computed prope
 
 ```
 type Angle {
-  public var radians: Double
+  public var radians: Float64
   public memberwise init
   
-  public property degrees: Double {
+  public property degrees: Float64 {
     let {
-      radians * 180.0 / Double.pi
+      radians * 180.0 / Float64.pi
     }
     inout {
-      var d = radians * 180.0 / Double.pi
+      var d = radians * 180.0 / Float64.pi
       yield &d
-      radians = d * Double.pi / 180.0
+      radians = d * Float64.pi / 180.0
     }
     set {
-      &radians = new_value * Double.pi / 180.0
+      &radians = new_value * Float64.pi / 180.0
     }
   }
 }
