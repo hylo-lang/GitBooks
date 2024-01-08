@@ -5,7 +5,7 @@ Hylo is statically typed: the type of a binding must always match the type of th
 ```
 public fun main() {
   var length = 1
-  &length = 2.3 // error: type 'Int' does not conform to trait 'ExpressibleByFloatLiteral'
+  &length = 2.3 // error: expected type `Int`, found `Float64`
 }
 ```
 
