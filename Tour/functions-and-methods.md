@@ -9,7 +9,7 @@ _Note: Though Hylo should not be considered a functional programming language, f
 A function declaration is introduced with the `fun` keyword, followed by the function's name, its signature, and finally its body:
 
 ```
-typealias Vector2 = (x: Float64, y: Float64)
+typealias Vector2 = {x: Float64, y: Float64}
 
 fun norm(_ v: Vector2) -> Float64 {
   Float64.sqrt(v.x * v.x + v.y * v.y)
@@ -32,7 +32,7 @@ Notice that the name of the parameter to that function is prefixed by an undersc
 You can specify a label different from the parameter name by replacing the underscore with an identifier. This feature can be used to create APIs that are clear and economical at the use site, especially for functions that accept multiple parameters:
 
 ```
-typealias Vector2 = (x: Float64, y: Float64)
+typealias Vector2 = {x: Float64, y: Float64}
 
 fun scale(_ v: Vector2, by factor: Vector2) -> Vector2 {
   (x: v.x * factor.x, y: v.y * factor.y)
@@ -47,7 +47,7 @@ let middle = scale(extent, by: half)
 Argument labels are also useful to distinguish between different variants of the same operation.
 
 ```
-typealias Vector2 = (x: Float64, y: Float64)
+typealias Vector2 = {x: Float64, y: Float64}
 
 fun scale(_ v: Vector2, by factor: Vector2) -> Vector2 {
   (x: v.x * factor.x, y: v.y * factor.y)
@@ -100,7 +100,7 @@ _Note: A default argument expression is evaluated at each call site._
 A parameter passing convention describes how an argument is passed from caller to callee. In Hylo, there are four: `let`, `inout`, `sink` and `set`. In the next series of examples, we will define four corresponding functions to offset this 2-dimensional vector type:
 
 ```
-typealias Vector2 = (x: Float64, y: Float64)
+typealias Vector2 = {x: Float64, y: Float64}
 ```
 
 We will also show how Hylo's parameter passing conventions relate to other programming languages, namely C++ and Rust.

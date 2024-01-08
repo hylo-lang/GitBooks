@@ -169,7 +169,7 @@ _Note: indexing a buffer outside of its bounds is either caught as a compile-tim
 The type of a buffer is written either `T[n]` or `Buffer<T, n>`, where `T` is a type and `n` the number of elements in the buffer. All elements of a buffer must be initialized at the same time as the buffer itself, either by the means of a buffer literal expression, as in the program above, or by calling a buffer _initializer_:
 
 ```
-typealias Point = (x: Float64, y: Float64)
+typealias Point = {x: Float64, y: Float64}
 public fun main() {
   var triangle = Point[3](fun(i) { (x: Float64(i), y: 0.0) }) // <== HERE
   &triangle[1].y = 2.5
@@ -182,7 +182,7 @@ In the program above, `triangle` is created by calling `Buffer.init(_:)`, which 
 An array is like a buffer that can be resized dynamically:
 
 ```
-typealias Point = (x: Float64, y: Float64)
+typealias Point = {x: Float64, y: Float64}
 public fun main() {
   var points = Array<Point>()
   print(points.count())            // 0
