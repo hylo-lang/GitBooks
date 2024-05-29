@@ -477,7 +477,7 @@ In the program above, the method `Vector2.offset(by:)` defines three variants, e
 
 _Note: A method bundle can not declare a `set` variant as it does not make sense to operate on a receiver that has not been initialized yet._
 
-At the call site, the compiler determines the variant to apply depending on the context of the call. In this example, the first call applies the `inout` variant as the receiver has been marked for mutation. The second call applies the `sink` variant as the receiver is no longer used aftertward.
+At the call site, the compiler determines the variant to apply depending on the context of the call. In this example, the first call applies the `inout` variant as the receiver has been marked for mutation. The second call applies the `sink` variant as the receiver is no longer used afterward.
 
 Thanks to the link between the `sink` and `inout` conventions, the compiler is able to synthesize one implementation from the other. Further, the compiler can also synthesize a `sink` variant from a `let` one.
 
