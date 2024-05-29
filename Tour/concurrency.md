@@ -21,7 +21,7 @@ Concurrency in Hylo is based on the following principles:
   * One doesn't need to understand the implementation of a function to understand how concurrency affects outside code.
   * Functions have one entry point and one exit point, regardless of the concurrency expressed in it.
 * The user shall focus on focus on expressing the constraints between work items.
-  * There is no need for low-level syncrhonization primitives, like mutexes and semaphores.
+  * There is no need for low-level synchronization primitives, like mutexes and semaphores.
 * User can understand and control the costs associated with concurrency.
   * Understanding how the application uses `spawn` abstractions and how it interacts with the non-Hylo code is enough to understand the costs associated with concurrency.
   * Hylo allows the user to fully customize the handling of concurrency.
@@ -244,7 +244,7 @@ let handle = spawn(scheduler:ioScheduler, fun() { readData(c) }
 
 ### HTTP server example
 
-Let's discuss an example that is drawn from real-life, and that covers control flow. We are trying to build an HTTP server driver, in wich we need to dispatch work when a new request comes on a new connection.
+Let's discuss an example that is drawn from real-life, and that covers control flow. We are trying to build an HTTP server driver, in which we need to dispatch work when a new request comes on a new connection.
 
 {% code lineNumbers="true" %}
 ```swift

@@ -1,6 +1,6 @@
 # Subscripts
 
-A subscript is a resuable piece of code that _yields_ the value of an object, or part thereof. It operates very similarly to a function, but rather than returning a value to its caller, it temporarily yields control for the caller to access the yielded value.
+A subscript is a reusable piece of code that _yields_ the value of an object, or part thereof. It operates very similarly to a function, but rather than returning a value to its caller, it temporarily yields control for the caller to access the yielded value.
 
 ```
 subscript min(_ x: Int, _ y: Int): Int {
@@ -98,7 +98,7 @@ public fun main() {
 
 A mutable subscript can always be used immutably as well. However, in the example above, because the parameters are `inout`, arguments to `min_inout` will have to be passed `inout` even when the subscript is used immutably.
 
-To solve that problem, we can mark the parameters `yielded` instead, which act as a placeholder for either `let`, `inout`, or `sink` dependeing on the way the subscript is being used.
+To solve that problem, we can mark the parameters `yielded` instead, which act as a placeholder for either `let`, `inout`, or `sink` depending on the way the subscript is being used.
 
 ```
 subscript min(_ x: yielded Int, _ y: yielded Int): Int {
