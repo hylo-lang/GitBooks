@@ -20,8 +20,8 @@ Concurrency in Hylo is based on the following principles:
   * Concurrency can be expressed with the help of simple functions.
   * One doesn't need to understand the implementation of a function to understand how concurrency affects outside code.
   * Functions have one entry point and one exit point, regardless of the concurrency expressed in it.
-* The user shall focus on focus on expressing the constraints between work items.
-  * There is no need for low-level synchronization primitives, like mutexes and semaphores.
+* The user shall focus on expressing the constraints between work items.
+  * There is no need for low-level syncrhonization primitives, like mutexes and semaphores.
 * User can understand and control the costs associated with concurrency.
   * Understanding how the application uses `spawn` abstractions and how it interacts with the non-Hylo code is enough to understand the costs associated with concurrency.
   * Hylo allows the user to fully customize the handling of concurrency.
@@ -164,7 +164,7 @@ default_scheduler().activate() // switching threads
 ```
 {% endcode %}
 
-On line 3, are are actually switching threads. The old thread is released back to the `ioScheduler`, while a new thread from the default scheduler is used to continue the work.
+On line 3, we are actually switching threads. The old thread is released back to the `ioScheduler`, while a new thread from the default scheduler is used to continue the work.
 
 ### Cancellation
 
