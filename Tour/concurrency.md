@@ -105,7 +105,7 @@ fun my_concurrent_sort(_ a: inout ArraySlice<Element>) {
 
 fun sort_partition(_ a: inout ArraySlice<Element>): Int {
     let mid_value = median9(a)
-    return a.partition(by: (val) => val > mid_value )
+    return a.partition(by: (val) => val > mid_value)
 }
 fun median9(_ a: inout ArraySlice<Element>) -> Element { ... } 
 ```
