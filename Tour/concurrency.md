@@ -1,6 +1,6 @@
 # Concurrency
 
-> :warning: The concurrency approach of Hylo is still under design. This document only present our current plans. Anything is still subject to change.
+> :warning: The concurrency approach of Hylo is still under design. This document only presents our current plans. Anything is still subject to change.
 
 ### Principles
 
@@ -14,14 +14,14 @@ Concurrency in Hylo is based on the following principles:
     * Use of abstractions as building blocks.
     * Ability to use recursive decomposition of the program.
     * Ability to use local reasoning.
-    * Soundness and completeness: all concurrent programs can be safely modelled in the concurrency model.
+    * Soundness and completeness: all concurrent programs can be safely modeled in the concurrency model.
   * See [this article](https://accu.org/journals/overload/30/168/overload168.pdf#page=11) for more details on _structured concurrency_.
 * Functions encapsulate concurrency.
   * Concurrency can be expressed with the help of simple functions.
-  * One doesn't need to understand the implementation of a function to understand how concurrency affects outside code.
+  * One doesn't need to understand the implementation of a function to understand how concurrency affects the outer code.
   * Functions have one entry point and one exit point, regardless of the concurrency expressed in it.
 * The user shall focus on expressing the constraints between work items.
-  * There is no need for low-level syncrhonization primitives, like mutexes and semaphores.
+  * There is no need for low-level synchronization primitives, like mutexes and semaphores.
 * User can understand and control the costs associated with concurrency.
   * Understanding how the application uses `spawn` abstractions and how it interacts with the non-Hylo code is enough to understand the costs associated with concurrency.
   * Hylo allows the user to fully customize the handling of concurrency.
@@ -29,7 +29,7 @@ Concurrency in Hylo is based on the following principles:
 ### Hello, concurrent world
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 fun main() {
   var handle = spawn(() => print("Hello, concurrent world!"))
   // do some other things
@@ -45,7 +45,7 @@ This code will print `Hello, concurrent world!` and will do this (most likely) f
 Let's have a slightly more complicated example:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 fun do_greet(): Int {
   print("Hello, concurrent world!")
   return 17
@@ -72,7 +72,7 @@ Hello, concurrent world!
 30
 ```
 
-The `spawn` on line 6 will create a new thread of execution and call `do_greet()` on that thread. On multi-core machines, this may be executed in parallel with the call to `prime_number()`. The call to `await` will join the two threads; it will return value produced by the spawned thread in the context of the original thread.
+The `spawn` on line 6 will create a new thread of execution and call `do_greet()` on that thread. On multi-core machines, this may be executed in parallel with the call to `prime_number()`. The call to `await` will join the two threads; it will return the value produced by the spawned thread in the context of the original thread.
 
 Assuming that there are two OS threads for this program, the call to `await` will not block any of these threads. Instead, it will continue on the OS thread that finishes last. In our example, this is most probably the spawn thread. This leads to an interesting arrangement: the OS thread on which  `concurrent_greeting()` finishes is different than the OS thread on which this function is started. We call this _thread inversion_.
 
@@ -83,7 +83,7 @@ The OS thread that starts `concurrent_greeting()` will be returned to the middle
 The following code shows a basic implementation of a quick-sort algorithm that can take advantage of multicore systems:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 fun my_concurrent_sort(_ a: inout ArraySlice<Element>) {
   if a.count < size_threshold {
     // Use serial sort under a certain threshold.
@@ -105,7 +105,7 @@ fun my_concurrent_sort(_ a: inout ArraySlice<Element>) {
 
 fun sort_partition(_ a: inout ArraySlice<Element>): Int {
     let mid_value = median9(a)
-    return a.partition(by: (val) => val > mid_value })
+    return a.partition(by: (val) => val > mid_value)
 }
 fun median9(_ a: inout ArraySlice<Element>) -> Element { ... } 
 ```
@@ -128,7 +128,7 @@ The user will get performance improvements of the concurrent algorithm when the 
 
 In the previous examples, we could only fork a thread of execution into two threads of executions. While this is enough from a theoretical perspective, in practice we want to to create multiple threads of executions from a single invocation. Here is a simple example on how can this be achieved:
 
-```swift
+```hylo
 fun greet(_ index: Int) {
   print("Hello, from thread ${index}")
 }
@@ -147,7 +147,7 @@ By default, the concurrency middleware comes with a scheduler that dispatches in
 However, the user can customise the scheduler used for spawning work, and provide version that are more optimised for things like I/O, networking, GPU, executing on different machines, etc. Here is an example:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 let io_scheduler = ...
 let file_content = (spawn(scheduler: io_scheduler, read_from_file)).await()
 ```
@@ -156,7 +156,7 @@ let file_content = (spawn(scheduler: io_scheduler, read_from_file)).await()
 In this example, the actual reading from file happens on a different scheduler and will not block any of the threads associated with the default CPU scheduler. The thread that executes the code will be suspended at line 2 until the data is read from the file. The code will continue to execute on the thread provided by the given scheduler. To get back to one of the threads of the default scheduler, one can write:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 let io_scheduler = ...
 let file_content = (spawn(scheduler: io_scheduler, read_from_file)).await()
 default_scheduler().activate() // switching threads
@@ -173,7 +173,7 @@ On line 3, we are actually switching threads. The old thread is released back to
 Sometimes it's useful to cancel an already-running operation. Here is an example:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 let handle = spawn(fun(s: StopToken) {
   for i in 1... {
     if s.stop_requested() {
@@ -195,7 +195,7 @@ The above code will print `working` several times (roughly 3 times), and then co
 Dropping the handle returned by `spawn` indicates that the caller is no longer interested in the completion of the spawned work, thus a stop signal will be sent. The following code behaves the same to the previous code snippet:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 let handle = spawn(fun(s: StopToken) {
   for i in 1... {
     if s.stop_requested() {
@@ -217,7 +217,7 @@ sink(handle)
 There is another case that involves cancellation: the spawned work is stopped without the caller knowledge. The caller still expects a value from the spawned work, and that value will never be produced; an exception will be used to signal the absence of the return value. Here is an example:
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 fun read_data(from c: FileContext) throws -> Buffer {
   var result: Buffer
   while c.needs_more_data() {
@@ -231,14 +231,13 @@ fun read_data(from c: FileContext) throws -> Buffer {
   return result
 }
 
-let handle = spawn(scheduler:ioScheduler, fun() { readData(c) }
-  ...
-  do {
-    let fileContent = try handle.await()
-  } catch {
-    // report I/O error
-  }
-})
+let handle = spawn(scheduler:ioScheduler, fun() -> Buffer { readData(c) })
+...
+do {
+  let fileContent = try handle.await()
+} catch {
+  // report I/O error
+}
 ```
 {% endcode %}
 
@@ -247,7 +246,7 @@ let handle = spawn(scheduler:ioScheduler, fun() { readData(c) }
 Let's discuss an example that is drawn from real-life, and that covers control flow. We are trying to build an HTTP server driver, in which we need to dispatch work when a new request comes on a new connection.
 
 {% code lineNumbers="true" %}
-```swift
+```hylo
 fun handle_incoming_connection(_ connection: HttpConnection) {
   do {
     // Read the HTTP request from the socket.
@@ -257,9 +256,9 @@ fun handle_incoming_connection(_ connection: HttpConnection) {
     let response = try handle_request(request)
     // Send back the response.
     send_response(response)
-  } catch InvalidRequestError(let details)
+  } catch InvalidRequestError(let details) {
     send_response(BadRequestResponse(details), to: connection)
-  } catch CancelledError
+  } catch CancelledError {
     send_response(GatewayTimeoutResponse(), to: connection)
   } catch {
     send_response(InternalServerErrorResponse(), to: connection)
@@ -270,7 +269,7 @@ fun handle_incoming_connection(_ connection: HttpConnection) {
 
 At the first glance, there is no concurrency expressed in this code. This is because the concurrency concerns are encapsulated in the called function. The three main functions here, `get_request()`, `handle_request()`, and `send_response` are all doing concurrent work.
 
-```swift
+```hylo
 fun get_request(_ connection: inout HttpConnection) throws: HttpRequest {
   // Do the reading on the network I/O scheduler.
   net_scheduler.activate()
@@ -322,6 +321,6 @@ fun send_response(_ response: HttpResponse, connection: inout HttpConnection) th
 
 In this example, we've shown how we can use the most appropriate scheduler to execute a given work. We might have a scheduler for doing network I/O (reading & writing), a scheduler to perform the main logic of analysing the request, and a scheduler that is used for actually processing the request. While processing the request, we may involve other types of schedulers, and, most probably, multiple threads may be used to speed up the execution of the request. Having multiple schedulers ensures control on different parts of the application; the user is able to fine-tune the level of concurrency exposed by the application.
 
-As with previous examples, controlling concurrency is straightforward for the user. They just need to express what concurrency constraints apply to different parts of the code; in this case by specifying in which scheduler a particular code needs to run.
+As with previous examples, controlling concurrency is straightforward for the user. They just need to express what concurrency constraints apply to different parts of the code; in this case by specifying which scheduler a particular code needs to run.
 
 [^1]: O.-J. Dahl, E. W. Dijkstra, C. A. R. Hoare, _Structured Programming_, Academic Press Ltd., 1972
