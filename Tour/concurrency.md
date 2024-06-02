@@ -164,7 +164,7 @@ default_scheduler().activate() // switching threads
 ```
 {% endcode %}
 
-On line 3, are are actually switching threads. The old thread is released back to the `ioScheduler`, while a new thread from the default scheduler is used to continue the work.
+On line 3, we are actually switching threads. The old thread is released back to the `ioScheduler`, while a new thread from the default scheduler is used to continue the work.
 
 ### Cancellation
 

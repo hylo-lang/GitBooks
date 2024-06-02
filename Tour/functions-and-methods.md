@@ -9,10 +9,10 @@ _Note: Though Hylo should not be considered a functional programming language, f
 A function declaration is introduced with the `fun` keyword, followed by the function's name, its signature, and finally its body:
 
 ```hylo
-typealias Vector2 = (x: Double, y: Double)
+typealias Vector2 = {x: Float64, y: Float64}
 
-fun norm(_ v: Vector2) -> Double {
-  Double.sqrt(v.x * v.x + v.y * v.y)
+fun norm(_ v: Vector2) -> Float64 {
+  Float64.sqrt(v.x * v.x + v.y * v.y)
 }
 
 public fun main() {
@@ -21,7 +21,7 @@ public fun main() {
 }
 ```
 
-The program above declares a function named `norm` that accepts a 2-dimensional vector (represented as a pair of `Double`) and returns its norm, or length.
+The program above declares a function named `norm` that accepts a 2-dimensional vector (represented as a pair of `Float64`) and returns its norm, or length.
 
 A function's signature describes its parameter and return types. The return type of a function that does not return any value, like `main` above, may be omitted. Equivalently we can explicitly specify that the return type is `Void`.
 
@@ -32,7 +32,7 @@ Notice that the name of the parameter to that function is prefixed by an undersc
 You can specify a label different from the parameter name by replacing the underscore with an identifier. This feature can be used to create APIs that are clear and economical at the use site, especially for functions that accept multiple parameters:
 
 ```hylo
-typealias Vector2 = (x: Double, y: Double)
+typealias Vector2 = {x: Float64, y: Float64}
 
 fun scale(_ v: Vector2, by factor: Vector2) -> Vector2 {
   (x: v.x * factor.x, y: v.y * factor.y)
@@ -47,12 +47,12 @@ let middle = scale(extent, by: half)
 Argument labels are also useful to distinguish between different variants of the same operation.
 
 ```hylo
-typealias Vector2 = (x: Double, y: Double)
+typealias Vector2 = {x: Float64, y: Float64}
 
 fun scale(_ v: Vector2, by factor: Vector2) -> Vector2 {
   (x: v.x * factor.x, y: v.y * factor.y)
 }
-fun scale(_ v: Vector2, uniformly_by factor: Double) -> Vector2 {
+fun scale(_ v: Vector2, uniformly_by factor: Float64) -> Vector2 {
   (x: v.x * factor, y: v.y * factor)
 }
 ```
@@ -62,8 +62,8 @@ The two `scale` functions above are similar, but not identical. The first accept
 A function with multiple statements that does not return `Void` must execute one `return` statement each time it is called.
 
 ```hylo
-fun round(_ n: Double, digits: Int) -> Double {
-  let factor = 10.0 ^ Double(digits)
+fun round(_ n: Float64, digits: Int) -> Float64 {
+  let factor = 10.0 ^ Float64(digits)
   return (n * factor).round() / factor
 }
 ```
@@ -71,8 +71,8 @@ fun round(_ n: Double, digits: Int) -> Double {
 To avoid warnings from the compiler, every non-`Void` value returned from a function must either be used, or be explicitly discarded by binding it to `_`.
 
 ```hylo
-fun round(_ n: Double, digits: Int) -> Double {
-  let factor = 10.0 ^ Double(digits)
+fun round(_ n: Float64, digits: Int) -> Float64 {
+  let factor = 10.0 ^ Float64(digits)
   return (n * factor).round() / factor
 }
 
@@ -84,8 +84,8 @@ public fun main() {
 Function parameters can have default values, which can be omitted at the call site:
 
 ```hylo
-fun round(_ n: Double, digits: Int = 3) -> Double {
-  let factor = 10.0 ^ Double(digits)
+fun round(_ n: Float64, digits: Int = 3) -> Float64 {
+  let factor = 10.0 ^ Float64(digits)
   return (n * factor).round() / factor
 }
 
@@ -100,7 +100,7 @@ _Note: A default argument expression is evaluated at each call site._
 A parameter passing convention describes how an argument is passed from caller to callee. In Hylo, there are four: `let`, `inout`, `sink` and `set`. In the next series of examples, we will define four corresponding functions to offset this 2-dimensional vector type:
 
 ```hylo
-typealias Vector2 = (x: Double, y: Double)
+typealias Vector2 = {x: Float64, y: Float64}
 ```
 
 We will also show how Hylo's parameter passing conventions relate to other programming languages, namely C++ and Rust.
@@ -198,7 +198,7 @@ fun main() {
 }
 ```
 
-_Note: You can probably guess now why the `+=` operator's left operand is always prefixed by an ampersand:_ _the type of `Double.infix+=` is `(inout Double, Double) -> Void`._
+_Note: You can probably guess now why the `+=` operator's left operand is always prefixed by an ampersand:_ _the type of `Float64.infix+=` is `(inout Float64, Float64) -> Void`._
 
 Second, `inout` arguments must be unique: they can only be passed to the function in one parameter position.
 
@@ -338,7 +338,7 @@ fun offset_inout2(_ v: inout Vector2, by delta: Vector2) {
 The `set` convention lets a callee initialize an uninitialized value. The compiler will only accept uninitialized objects as arguments to a set parameter.
 
 ```hylo
-fun init_vector(_ target: set Vector2, x: sink Double, y: sink Double) {
+fun init_vector(_ target: set Vector2, x: sink Float64, y: sink Float64) {
   target = (x: x, y: y)
 }
 
@@ -373,8 +373,8 @@ A method is a function associated with a particular type, called the **receiver*
 
 ```hylo
 type Vector2 {
-  public var x: Double
-  public var y: Double
+  public var x: Float64
+  public var y: Float64
   public memberwise init
 
   public fun offset_let(by delta: Vector2) -> Vector2 { // <== HERE
@@ -441,8 +441,8 @@ When multiple methods have the same functionality but differ only in the passing
 
 ```hylo
 type Vector2 {
-  public var x: Double
-  public var y: Double
+  public var x: Float64
+  public var y: Float64
   public memberwise init
 
   public fun offset(by delta: Vector2) -> Vector2 {
@@ -494,7 +494,7 @@ type Vector2 {
 
 #### **Static methods**
 
-A type can be used as a namespace for global functions that relate to that type. For example, the function `Double.random(in:using:)` is a global function declared in the namespace of `Double`.
+A type can be used as a namespace for global functions that relate to that type. For example, the function `Float64.random(in:using:)` is a global function declared in the namespace of `Float64`.
 
 A global function declared in the namespace of a type is called a _static method_. Static methods do not have an implicit receiver parameter. Instead, they behave just like regular global functions.
 
@@ -503,8 +503,8 @@ A static method is declared with `static`:
 ```hylo
 type Vector2 {
   // ...
-  public static fun random(in range: Range<Double>) -> Vector2 {
-    Vector2(x: Double.random(in: range), y: Double.random(in: range))
+  public static fun random(in range: Range<Float64>) -> Vector2 {
+    Vector2(x: Float64.random(in: range), y: Float64.random(in: range))
   }
 }
 ```
@@ -524,14 +524,14 @@ public fun main() {
 Functions are first-class citizens in Hylo, meaning that they be assigned to bindings, passed as arguments or returned from functions, like any other value. When a function is used as a value, it is called a _closure_.
 
 ```hylo
-fun round(_ n: Double, digits: Int) -> Double {
-  let factor = 10.0 ^ Double(digits)
+fun round(_ n: Float64, digits: Int) -> Float64 {
+  let factor = 10.0 ^ Float64(digits)
   return (n * factor).round() / factor
 }
 
 public fun main() {
   let f = round(_:digits:)
-  print(type(of: f)) // (_: Double, digits: Int) -> Double
+  print(type(of: f)) // (_: Float64, digits: Int) -> Float64
 }
 ```
 
